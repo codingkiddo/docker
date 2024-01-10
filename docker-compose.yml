@@ -2,6 +2,7 @@ version: '2.1'
 services:
   database:
     image: postgres:latest
+    container_name: postgres
     ports:
       - "5432:5432"
     environment:
@@ -20,6 +21,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+      
   configserver:
     image: codingkiddo/configserver:latest
     ports:
@@ -30,6 +32,20 @@ services:
       backend:
         aliases:
           - "configserver"
+  eurekaserver:
+    image: codingkiddo/eurekaserver:latest
+    ports:
+      - "8070:8070"
+    depends_on:
+      database:
+        condition: service_healthy
+      configserver:
+        condition: service_started  
+    networks:
+      backend:
+        aliases:
+          - "eurekaserver"
+
   licensingservice:
     image: codingkiddo/licensing-service:latest
     environment:
@@ -45,6 +61,23 @@ services:
         condition: service_started
     ports:
       - "8080:8080"
+    networks:
+      - backend
+  organizationservice:
+    image: codingkiddo/organization-service:latest
+    environment:
+      PROFILE: "dev"
+      CONFIGSERVER_URI: "http://configserver:8071"
+      CONFIGSERVER_PORT:   "8071"
+      DATABASESERVER_PORT: "5432"
+      ENCRYPT_KEY:       "IMSYMMETRIC"
+    depends_on:
+      database:
+        condition: service_healthy
+      configserver:
+        condition: service_started
+    ports:
+      - "8081:8081"
     networks:
       - backend
 
