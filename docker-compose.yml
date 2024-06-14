@@ -1,8 +1,7 @@
-version: '2.1'
+version: '3'
 services:
   database:
     image: postgres:latest
-    container_name: postgres
     ports:
       - "5432:5432"
     environment:
@@ -21,9 +20,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-      
   configserver:
-    image: codingkiddo/configserver:latest
+    image: codingkiddo/configserver:0.0.1-SNAPSHOT
     ports:
        - "8071:8071"
     environment:
@@ -32,88 +30,24 @@ services:
       backend:
         aliases:
           - "configserver"
-  eurekaserver:
-    image: codingkiddo/eurekaserver:latest
-    ports:
-      - "8070:8070"
-    depends_on:
-      database:
-        condition: service_healthy
-      configserver:
-        condition: service_started  
-    networks:
-      backend:
-        aliases:
-          - "eurekaserver"
-  gatewayserver:
-    image: codingkiddo/gatewayserver:latest
-    ports:
-      - "8072:8072"
-    environment:
-      PROFILE: "default"
-      SERVER_PORT: "8072"
-      CONFIGSERVER_URI: "http://configserver:8071"
-      EUREKASERVER_URI: "http://eurekaserver:8070/eureka/"
-      EUREKASERVER_PORT: "8070"
-      CONFIGSERVER_PORT: "8071"
-    depends_on:
-      database:
-        condition: service_healthy
-      configserver:
-        condition: service_started
-      eurekaserver:
-        condition: service_started
-    networks:
-      backend:
-        aliases:
-          - "gateway"
   licensingservice:
-    image: codingkiddo/licensing-service:latest
+    image: codingkiddo/licensing-service:0.0.2-SNAPSHOT
     environment:
-      PROFILE: "dev"
+      PROFILE: "prod"
       CONFIGSERVER_URI: "http://configserver:8071"
-      CONFIGSERVER_PORT: "8071"
+      CONFIGSERVER_PORT:   "8071"
       DATABASESERVER_PORT: "5432"
-      ENCRYPT_KEY: "IMSYMMETRIC"
+      ENCRYPT_KEY:       "IMSYMMETRIC"
     depends_on:
       database:
         condition: service_healthy
       configserver:
         condition: service_started
-    ports:
-      - "8180:8080"
-    networks:
-      - backend
-  organizationservice:
-    image: codingkiddo/organization-service:latest
-    environment:
-      PROFILE: "dev"
-      CONFIGSERVER_URI: "http://configserver:8071"
-      CONFIGSERVER_PORT: "8071"
-      DATABASESERVER_PORT: "5432"
-      ENCRYPT_KEY: "IMSYMMETRIC"
-    depends_on:
-      database:
-        condition: service_healthy
-      configserver:
-        condition: service_started
-    ports:
-      - "8081:8081"
-    networks:
-      - backend
-  keycloak:
-    image: quay.io/keycloak/keycloak:23.0.5
-    container_name: "ostock-keycloak"
-    command: start-dev
-    environment:
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
     ports:
       - "8080:8080"
     networks:
-      backend:
-        aliases:
-          - "keycloak"
+      - backend
+
 networks:
   backend:
     driver: bridge
