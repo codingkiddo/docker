@@ -33,7 +33,7 @@ services:
   licensingservice:
     image: codingkiddo/licensing-service:0.0.2-SNAPSHOT
     environment:
-      PROFILE: "prod"
+      PROFILE: "dev"
       CONFIGSERVER_URI: "http://configserver:8071"
       CONFIGSERVER_PORT:   "8071"
       DATABASESERVER_PORT: "5432"
