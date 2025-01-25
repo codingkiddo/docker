@@ -21,17 +21,18 @@ services:
       timeout: 5s
       retries: 5
   configserver:
-    image: codingkiddo/configserver:0.0.1-SNAPSHOT
+    image: codingkiddo/configserver:0.0.5-SNAPSHOT
     ports:
        - "8071:8071"
     environment:
+      PROFILE: "native"
       ENCRYPT_KEY: "fje83Ki8403Iod87dne7Yjsl3THueh48jfuO9j4U2hf64Lo"
     networks:
       backend:
         aliases:
           - "configserver"
   licensingservice:
-    image: codingkiddo/licensing-service:0.0.2-SNAPSHOT
+    image: codingkiddo/licensing-service:0.0.5-SNAPSHOT
     environment:
       PROFILE: "dev"
       CONFIGSERVER_URI: "http://configserver:8071"
