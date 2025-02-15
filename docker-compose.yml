@@ -24,7 +24,7 @@ services:
   configserver:
     image: codingkiddo/configserver:0.0.5-SNAPSHOT
     ports:
-       - "8071:8071"
+       - "8888:8888"
     environment:
       ENCRYPT_KEY: "fje83Ki8403Iod87dne7Yjsl3THueh48jfuO9j4U2hf64Lo"
     networks:
@@ -35,8 +35,8 @@ services:
     image: codingkiddo/licensing-service:0.0.5-SNAPSHOT
     environment:
       PROFILE: "dev"
-      CONFIGSERVER_URI: "http://configserver:8071"
-      CONFIGSERVER_PORT:   "8071"
+      CONFIGSERVER_URI: "http://configserver:8888"
+      CONFIGSERVER_PORT:   "8888"
       DATABASESERVER_PORT: "5432"
       ENCRYPT_KEY:       "IMSYMMETRIC"
     depends_on:
