@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 
 services:
   database:
@@ -34,12 +34,10 @@ services:
   licensingservice:
     image: codingkiddo/licensing-service:0.0.5-SNAPSHOT
     environment:
-      PROFILE: "dev"
-      CONFIGSERVER_URI: "http://configserver:8888"
-      CONFIGSERVER_PORT:   "8888"
-      DATABASESERVER_PORT: "5432"
+      SPRING_PROFILES_ACTIVE: "dev"
+      SPRING_CLOUD_CONFIG_URI: "http://configserver:8888"
       ENCRYPT_KEY:       "IMSYMMETRIC"
-    depends_on:
+    depends_on: 
       database:
         condition: service_healthy
       configserver:
