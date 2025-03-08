@@ -50,6 +50,8 @@ services:
         condition: service_healthy
       configserver:
         condition: service_healthy
+    links: 
+      - configserver
     ports:
       - "8080:8080"
     healthcheck: 
