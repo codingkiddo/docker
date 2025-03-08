@@ -45,8 +45,6 @@ services:
         condition: service_healthy
       configserver:
         condition: service_completed_successfully
-    links: 
-      - configserver
     ports:
       - "8080:8080"
     networks:
