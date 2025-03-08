@@ -49,7 +49,7 @@ services:
       database:
         condition: service_healthy
       configserver:
-        condition: service_healthy
+        condition: service_completed_successfully
     links: 
       - configserver
     ports:
