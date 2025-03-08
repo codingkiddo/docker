@@ -32,11 +32,7 @@ services:
       backend:
         aliases:
           - "configserver"
-    healthcheck: 
-       test: ["CMD", "curl", "-f", "http://configserver:8888"]
-       interval: 30s
-       timeout: 10s
-       retries: 5
+   
   licensingservice:
     image: codingkiddo/licensing-service:0.0.5-SNAPSHOT
     environment:
@@ -51,6 +47,11 @@ services:
         condition: service_healthy
     ports:
       - "8080:8080"
+    healthcheck: 
+      test: ["CMD", "curl", "-f", "http://configserver:8888"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
     networks:
       - backend
 
