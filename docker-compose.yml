@@ -32,6 +32,10 @@ services:
       backend:
         aliases:
           - "configserver"
+    healthcheck: 
+       interval: 30s
+       timeout: 10s
+       retries: 5
   licensingservice:
     image: codingkiddo/licensing-service:0.0.5-SNAPSHOT
     environment:
