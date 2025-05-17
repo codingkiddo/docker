@@ -30,6 +30,21 @@ networks:
 	
 docker run -d -p 8200:8200 --name vault -e 'VAULT_DEV_ROOT_TOKEN_ID=myroot' -e 'VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200' vault
 
+ddocker run -d -p 8200:8200 --name vault -e 'VAULT_DEV_ROOT_TOKEN_ID=myroot' -e 'VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200' hashicorp/vault:1.19
+
+
+curl -X "GET" "http://localhost:8888/licensing-service/default" -H "X-Config-Token: myroot" | jq
+curl -X "GET" "http://localhost:8888/licensing-service/dev" -H "X-Config-Token: myroot" | jq
+
+
+
+curl --header "X-Vault-Token: myroot" --request GET http://127.0.0.1:8200/v1/licensing-service/data/default | jq
+
+
+curl \
+  --header "X-Vault-Token: myroot" \
+  --request GET \
+  http://127.0.0.1:8200/v1/licensing-service/data/default | jq
 
 
 docker inspect docker-database-1  -f "{{json .NetworkSettings.Networks }}"
